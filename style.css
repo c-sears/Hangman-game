@@ -1,0 +1,17 @@
+.underline {
+    border-bottom: 2px solid;
+}
+
+#letters {
+    list-style: none;
+    
+}
+
+.letter {
+    list-style: none;
+    display: inline-block;
+    border-bottom: 1px solid;
+    margin: 0 5px;
+    width: 20px;
+    text-align: center;
+}
