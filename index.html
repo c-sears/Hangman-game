@@ -4,12 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Fjalla+One|Mina" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
     <title>Hangman</title>
 </head>
 <body>
 
-    <div>
+    <div class="page-header bg-white">
+        <img class="logo col-sm-2" src="./assets/images/fortnight-logo.png" alt="Fortnight">
+        <small><h2 class="header-small">:Hangman Edition</h2></small>
+    </div>
+
+    <!-- Creating the pop-up to display to the user before the game begins -->
+    <div class="pop-up" id="test">
+        <div class="esc-btn" id="escBtn" onclick="togglePopUp()">x</div>
+        <p class="pop-up-header">Welcome to my game of Hangman!</p>
+        <div class="pop-up-body">
+            <div class="rules">
+                <ul><h3>Some basic rules to get you started:</h3>
+                    <li>Select your letter by simply pressing it on the keyboard</li>
+                    <li>Watch out! You have 100hp at the beginning of each new word, but every wrong letter drops it by 10hp!</li>
+                    <li>Once you die your total score will be reset, but you are more than welcom to keep playing!</li>
+                </ul>
+            </div>
+            <div class="bio">
+                <h1>I hope you have as much fun playing this game as I did making it!!!</h1>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="wrapper">
+        <!-- SIDE PANEL LEFT -->
+        <div class="side-panel left-panel">
+            <div class="box-small games-won">
+                <strong>Games won:</strong>
+                <p id="score"></p>
+            </div> 
+            <div class="box-md guessed-letters">
+                <strong>Letters guessed:</strong><br>
+                <p id="incorrectLetters"></p>
+            </div>
+            <button class="box-small" id="newWord" onclick="gameFunctions.getNewWord()">New Word</button>
+        </div>
+
+        <!-- GIF CONTAINER -->
+        <div class="box-large" id="gifContainer"></div>
+
+        <!-- SIDE PANEL RIGHT -->
+        <div class="side-panel right-panel">
+            <img class="player-character" src="./assets/images/player_character.png" alt="Character">
+            <div class="healthBar">
+                <div id="healthBarInner"><p id="healthDisplay"></p></div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <!-- CURRENT WORD -->
+            <div class="box-wide">
+                <h1 id="wordToGuess"></h1>
+            </div>
+
+            <div class="console">
+                <p id="consoleLog"></p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- <div>
         <h3>Letters to choose from:</h3>
         <p id="availableLetters"></p>
     </div>
@@ -25,7 +94,7 @@
 
     <div>
         <p id="score"></p>
-    </div>
+    </div> -->
 
     <script src="./logic.js"></script>
 </body>

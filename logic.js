@@ -1,29 +1,39 @@
 
 // GLOBAL VARIABLES
 // =======================================================================================
-var possibleWords = ['happy', 'california', 'peace', 'shoeshine'];
+var possibleWords = ['pull-up-with-the-sticks', 'pump-shotty', 'tilted-towers', 'double-pump', 'battle-bus', 'tomato-town', 'trump-tower', 'battle-royale', '"revive-me-bro!!!"', 'salty-springs', 'retail-row', 'any-extra-shield?'];
 var rand;
 var currentWord;
 var availableLetters = [];
 var userChoice;
 var wordToGuess = document.getElementById('wordToGuess');
 var incorrectDom = document.getElementById('incorrectLetters');
-var lettersRemaining = document.getElementById('availableLetters');
+var healthBar = document.getElementById('healthBarInner');
 var consoleLog = document.getElementById('consoleLog'); 
 var scoreDisplay = document.getElementById('score');
+var healthDisplay = document.getElementById('healthDisplay')
+var newWord = document.getElementById('newWord');
+var gifContainer = document.getElementById('gifContainer');
+var popUp = document.getElementById('test');
 var displayToDom = [];
 var guessedLetters = [];
 var incorrectLetters = [];
-var lives = 5;
+var health = 100;
+var lives = 10;
 var score = 0;
 var gameScore = 0;
-var placeHolder = incorrectLetters[incorrectLetters.length - 1];
+var isPlaying = true;
 var messagesToDisplay = { 
-        youWin: 'You win! press "New Word" to get a new word to guess',
+        youWin: 'You win! press "New Word" to get a new word to guess.',
+        youLose: 'You lost!! Press "Reset" if you would like to keep playing.',
         alreadyPicked: 'You\'ve already picked this letter.',
-        notLetter: 'This is not a letter',
+        notLetter: 'Please choose a letter.',
         wrongLetter: ' was incorrect.', // After much debugging.. I caved and put userChoice as a parameter of the consoleLog function.
     };
+var gifObject = {
+    youWin: "<img src='https://thumbs.gfycat.com/RigidFlickeringIndianringneckparakeet-size_restricted.gif'alt='You win!!' />",
+    youLose: "<img src='https://thumbs.gfycat.com/ElasticPinkBluetickcoonhound-size_restricted.gif' alt = 'You lose!!' />",
+}
 
 
 // END GLOBAL VARIABLES
@@ -39,21 +49,49 @@ var gameFunctions = {
         guessedLetters = [];
         incorrectLetters = [];
         displayToDom = [];
-        lives = 5;
+        health = 100;
+        lives = 10;
         score = 0;
+        healthBar.style.width = "100%";
+        this.createUnderscores();
+        this.updateScreen();
+    },
+    getNewWord: function(){
+        availableLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        rand = Math.floor(Math.random() * possibleWords.length);
+        currentWord = possibleWords[rand];
+        isPlaying = true;
+        guessedLetters = [];
+        incorrectLetters = [];
+        displayToDom = [];
+        gifContainer.innerHTML = "";
+        consoleLog.innerHTML = "";
+        health = 100;
+        lives = 10;
+        score = 0;
+        healthBar.style.width = "100%";
         this.createUnderscores();
         this.updateScreen();
     },
     createUnderscores: function(){
         for (var i = 0; i < currentWord.length; i++){
-            displayToDom.push('_');
+            if (availableLetters.includes(currentWord[i])){
+                displayToDom.push('_');
+            }
+            else {
+                displayToDom.push(currentWord[i]);
+                score += 1;
+            }
         };
     },
     updateScreen: function(){
         wordToGuess.innerHTML = displayToDom.join(' ');
         incorrectDom.innerHTML = incorrectLetters.join(', ');
-        lettersRemaining.innerHTML = availableLetters.join(', ');
+        healthDisplay.innerHTML = health + ' / 100';
         scoreDisplay.innerHTML = gameScore;
+    },
+    updateGif: function(gif){
+        gifContainer.innerHTML = gif;
     },
     updateConsole: function (message){ 
         consoleLog.innerText = message;
@@ -80,17 +118,29 @@ var gameFunctions = {
                     this.updateScreen();
                     if (score == currentWord.length){
                         gameScore += 1;
+                        this.updateGif(gifObject.youWin);
                         this.updateConsole(messagesToDisplay.youWin);
                         this.updateScreen();
-                        this.startGame();
+                        
                     }
                 }
                 // If letter chosen IS NOT IN current word
                 else {
                     lives -= 1;
+                    health -= 10;
                     incorrectLetters.push(chosen);
+                    healthBar.style.width = health + '%';
                     this.updateScreen();
-                    this.updateConsole(chosen + messagesToDisplay.wrongLetter);
+                    this.updateConsole('"' + chosen + '"' + messagesToDisplay.wrongLetter);
+                    if (lives == 0){
+                        isPlaying = false;
+                        gameScore = 0;
+                        newWord.innerText = 'Reset';
+                        this.updateScreen();
+                        wordToGuess.innerText = currentWord;
+                        this.updateConsole(messagesToDisplay.youLose);
+                        this.updateGif(gifObject.youLose);
+                    }
                 };
             }
             else {
@@ -110,11 +160,27 @@ var gameFunctions = {
 
 window.onload = gameFunctions.startGame();
 
+
 document.onkeydown = function(event){
-    userChoice = event.key.toLowerCase();
-    gameFunctions.userGuess(userChoice);
-    
+    if (isPlaying == true){
+        userChoice = event.key.toLowerCase();
+        gameFunctions.userGuess(userChoice);
+    }
+    else {
+        alert('You lost!! Maybe press "New word" and see what happens?? idk..');
+    }
+};
+
+
+var escBtn = document.getElementById('escBtn');
+
+function togglePopUp(){
+    popUp.style.display = 'none';
+    console.log('it worked');
 }
+
+
+
 
 console.log(currentWord);
 
